@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Escala de Trabalho</title>
+    <style>
+        :root {
+            --primary-color: #3a506b;
+            --secondary-color: #5bc0be;
+            --accent-color: #0b132b;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --text-color: #333;
+            --header-bg: #0b132b;
+            --border-color: #ddd;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-color);
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1, h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .panel {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .panel-title {
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 5px;
+        }
+        
+        input, select, button, textarea {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(91, 192, 190, 0.25);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--accent-color);
+        }
+        
+        button.danger {
+            background-color: var(--danger-color);
+        }
+        
+        button.danger:hover {
+            background-color: #bd2130;
+        }
+        
+        button.success {
+            background-color: var(--success-color);
+        }
+        
+        button.success:hover {
+            background-color: #218838;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background-color: var(--header-bg);
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background-color: rgba(91, 192, 190, 0.1);
+        }
+        
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .message {
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .success-message {
+            background-color: rgba(40, 167, 69, 0.2);
+            border: 1px solid var(--success-color);
+            color: #155724;
+        }
+        
+        .error-message {
+            background-color: rgba(220, 53, 69, 0.2);
+            border: 1px solid var(--danger-color);
+            color: #721c24;
+        }
+        
+        .message-container {
+            height: 50px;
+        }
+        
+        .flex-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .flex-buttons button {
+            flex: 1;
+        }
+        
+        textarea.json-data {
+            width: 100%;
+            height: 150px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+            margin: 0 5px 0 0;
+        }
+        
+        .checkbox-container label {
+            margin: 0;
+            font-weight: normal;
+        }
+        
+        .sorteio-section {
+            margin-top: 20px;
+        }
+        
+        .sorteio-result {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .sorteio-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .sorteio-item:last-child {
+            border-bottom: none;
+        }
+
+        .datas-container {
+            margin-bottom: 15px;
+        }
+
+        .datas-adicionadas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .data-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .data-tag .remover {
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .data-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .data-input-container input {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .data-input-container button {
+            width: auto;
+            margin-bottom: 0;
+        }
+
+        .sorteio-table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        .sorteio-table th, .sorteio-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .sorteio-table th {
+            background-color: var(--header-bg);
+            color: white;
+        }
+
+        .mes-separador {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Sistema de abas */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-bottom: -2px;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .tab-button.active {
+            background-color: var(--secondary-color);
+            color: white;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .rule-description {
+            font-size: 14px;
+            color: #666;
+            margin-top: -5px;
+            margin-bottom: 15px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-buttons button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 15px;
+        }
+        
+        .action-buttons button svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        /* Estilos para impressão */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .print-section, .print-section * {
+                visibility: visible;
+            }
+            
+            .print-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .sorteio-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            
+            .sorteio-table th, .sorteio-table td {
+                border: 1px solid #000;
+            }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .panel {
+                padding: 15px;
+            }
+            
+            .checkbox-group {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-direction: row;
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
+            
+            .tab-button {
+                flex: 1;
+                text-align: center;
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerador de Escala de Trabalho</h1>
+    
+    <div class="message-container" id="messageContainer"></div>
+    
+    <div class="tabs">
+        <button class="tab-button active" data-tab="profissionais">Profissionais</button>
+        <button class="tab-button" data-tab="escala">Gerar Escala</button>
+        <button class="tab-button" data-tab="regras">Regras do Sorteio</button>
+        <button class="tab-button" data-tab="configuracoes">Configurações</button>
+    </div>
+    
+    <div class="container">
+        <!-- Aba de Profissionais -->
+        <div id="profissionais" class="tab-content active">
+            <div class="panel">
+                <h2 class="panel-title">Adicionar/Editar Profissional</h2>
+                
+                <form id="profissionalForm">
+                    <input type="hidden" id="profissionalId">
+                    
+                    <label for="nome">Nome do Profissional:</label>
+                    <input type="text" id="nome" required>
+                    
+                    <label for="genero">Gênero:</label>
+                    <select id="genero" required>
+                        <option value="">Selecione...</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                    </select>
+                    
+                    <label for="titulo">Título (opcional):</label>
+                    <select id="titulo">
+                        <option value="">Nenhum</option>
+                        <option value="Pr">Pastor (Pr)</option>
+                        <option value="Pra">Pastora (Pra)</option>
+                        <option value="Pb">Presbítero (Pb)</option>
+                        <option value="Dc">Diácono/Diaconisa (Dc)</option>
+                        <option value="Ev">Evangelista (Ev)</option>
+                    </select>
+                    
+                    <label>Turmas:</label>
+                    <div class="checkbox-group" id="turmasGroup">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="turmaAdultos" name="turmas" value="Adultos">
+                            <label for="turmaAdultos">Adultos</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="turmaJovens" name="turmas" value="Jovens">
+                            <label for="turmaJovens">Jovens</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="turmaAdolescentes" name="turmas" value="Adolescentes">
+                            <label for="turmaAdolescentes">Adolescentes</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="turmaJuniores" name="turmas" value="Juniores">
+                            <label for="turmaJuniores">Juniores</label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-buttons">
+                        <button type="submit" class="success" id="saveButton">Salvar Profissional</button>
+                        <button type="button" id="cancelButton">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="panel">
+                <h2 class="panel-title">Lista de Profissionais</h2>
+                
+                <div class="table-responsive">
+                    <table id="profissionaisTable">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Gênero</th>
+                                <th>Turmas</th>
+                                <th>Nome Completo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="profissionaisTableBody">
+                            <!-- Os dados dos profissionais serão inseridos aqui via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Aba de Escala -->
+        <div id="escala" class="tab-content">
+            <div class="panel">
+                <h2 class="panel-title">Gerar Escala por Sorteio</h2>
+                
+                <label for="datasSorteio">Datas para a Escala:</label>
+                <div class="datas-container">
+                    <div id="datasAdicionadas" class="datas-adicionadas"></div>
+                    <div class="data-input-container">
+                        <input type="date" id="dataSorteio">
+                        <button type="button" id="adicionarData" class="btn-small">Adicionar Data</button>
+                    </div>
+                </div>
+                
+                <button id="realizarSorteio" class="success">Realizar Sorteio</button>
+                
+                <div id="resultadoSorteio" class="sorteio-result hidden">
+                    <!-- Resultado do sorteio será exibido aqui -->
+                </div>
+                
+                <div id="acoesSorteio" class="action-buttons hidden">
+                    <button id="compartilharEscala" class="success">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                        Compartilhar Escala
+                    </button>
+                    <button id="imprimirEscala">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>
+                        Imprimir Escala
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Aba de Regras do Sorteio -->
+        <div id="regras" class="tab-content">
+            <div class="panel">
+                <h2 class="panel-title">Regras do Sorteio</h2>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="regraLinha" name="regras" value="linha">
+                    <label for="regraLinha">Não repetir nome na mesma linha</label>
+                </div>
+                <p class="rule-description">Evita que o mesmo profissional seja sorteado para mais de uma turma na mesma data.</p>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="regraIntercalar" name="regras" value="intercalar">
+                    <label for="regraIntercalar">Intercalar homens e mulheres por coluna</label>
+                </div>
+                <p class="rule-description">Alterna entre profissionais masculinos e femininos em cada turma ao longo das datas.</p>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="regraSequencia" name="regras" value="sequencia">
+                    <label for="regraSequencia">Não repetir nomes em sequência</label>
+                </div>
+                <p class="rule-description">Evita que o mesmo profissional seja sorteado em datas consecutivas para a mesma turma.</p>
+
+                <div class="checkbox-container">
+                    <input type="checkbox" id="regraPrioridade" name="regras" value="prioridade">
+                    <label for="regraPrioridade">Prioridade para não selecionados</label>
+                </div>
+                <p class="rule-description">Dá preferência aos profissionais que ainda não foram sorteados para uma determinada turma.</p>
+                
+                <div class="panel-info" style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 4px; border-left: 4px solid var(--secondary-color);">
+                    <p><strong>Nota:</strong> Quanto mais regras ativadas, mais difícil será encontrar uma combinação válida, especialmente se houver poucos profissionais disponíveis para cada turma.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Aba de Configurações -->
+        <div id="configuracoes" class="tab-content">
+            <div class="panel">
+                <h2 class="panel-title">Gerenciar Dados</h2>
+                
+                <!-- Área para importar/exportar dados como texto -->
+                <div>
+                    <label for="dataJson">Dados em formato JSON:</label>
+                    <textarea id="dataJson" class="json-data" placeholder="Cole aqui os dados em formato JSON para importar..."></textarea>
+                    
+                    <div class="flex-buttons">
+                        <button id="copyJsonBtn" class="success">Copiar Dados</button>
+                        <button id="loadJsonBtn">Carregar Dados</button>
+                    </div>
+                </div>
+                
+                <hr style="margin: 20px 0;">
+                
+                <!-- Dados de exemplo pré-carregados -->
+                <button id="loadSampleData">Carregar Dados de Exemplo</button>
+                <button id="clearData" class="danger">Limpar Todos os Dados</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Área oculta para impressão -->
+    <div id="printArea" class="hidden"></div>
+
+    <script>
+        // Modelo de dados para armazenar os profissionais (em memória)
+        let profissionais = [];
+        let editingIndex = -1;
+        
+        // Variável para armazenar as datas selecionadas
+        let datasSelecionadas = [];
+        
+        // Variáveis para armazenar as regras do sorteio
+        let regras = {
+            naoRepetirNaMesmaLinha: false,
+            intercalarGeneros: false,
+            naoRepetirEmSequencia: false,
+            prioridadeNaoSelecionados: false
+        };
+        
+        // Variável para armazenar os resultados do último sorteio
+        let ultimoResultadoSorteio = [];
+        
+        // Dados de exemplo
+        const dadosExemplo = [
+            { nome: "Salvador", genero: "M", titulo: "Pr", turmas: ["Adultos", "Jovens"] },
+            { nome: "Josélia", genero: "F", titulo: "Pra", turmas: ["Adultos"] },
+            { nome: "Paulo", genero: "M", titulo: "Pb", turmas: ["Adultos", "Jovens", "Adolescentes"] },
+            { nome: "Deyviton", genero: "M", titulo: "Pb", turmas: ["Jovens", "Adolescentes"] },
+            { nome: "Carlos", genero: "M", titulo: "Pr", turmas: ["Adultos"] },
+            { nome: "Edilson", genero: "M", titulo: "Pr", turmas: ["Adultos", "Jovens"] },
+            { nome: "Clovis", genero: "M", titulo: "", turmas: ["Adultos"] },
+            { nome: "Sildete", genero: "F", titulo: "", turmas: ["Adultos", "Juniores"] },
+            { nome: "Dora", genero: "F", titulo: "", turmas: ["Juniores"] },
+            { nome: "Mary", genero: "F", titulo: "", turmas: ["Adolescentes", "Juniores"] },
+            { nome: "Marta", genero: "F", titulo: "", turmas: ["Adultos"] },
+            { nome: "Deusilene", genero: "F", titulo: "", turmas: ["Juniores"] },
+            { nome: "Silvania", genero: "F", titulo: "Dc", turmas: ["Adolescentes"] },
+            { nome: "Diwene", genero: "F", titulo: "", turmas: ["Jovens", "Adolescentes"] }
+        ];
+        
+        // Elementos do DOM
+        const form = document.getElementById('profissionalForm');
+        const profissionalIdInput = document.getElementById('profissionalId');
+        const nomeInput = document.getElementById('nome');
+        const generoSelect = document.getElementById('genero');
+        const tituloSelect = document.getElementById('titulo');
+        const turmasCheckboxes = document.querySelectorAll('input[name="turmas"]');
+        const saveButton = document.getElementById('saveButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const profissionaisTableBody = document.getElementById('profissionaisTableBody');
+        const messageContainer = document.getElementById('messageContainer');
+        const dataJsonTextarea = document.getElementById('dataJson');
+        const copyJsonBtn = document.getElementById('copyJsonBtn');
+        const loadJsonBtn = document.getElementById('loadJsonBtn');
+        const loadSampleDataBtn = document.getElementById('loadSampleData');
+        const clearDataBtn = document.getElementById('clearData');
+
+        // Elementos do DOM para o sorteio
+        const dataSorteioInput = document.getElementById('dataSorteio');
+        const adicionarDataBtn = document.getElementById('adicionarData');
+        const datasAdicionadasDiv = document.getElementById('datasAdicionadas');
+        const realizarSorteioBtn = document.getElementById('realizarSorteio');
+        const resultadoSorteioDiv = document.getElementById('resultadoSorteio');
+        const acoesSorteioDiv = document.getElementById('acoesSorteio');
+        const compartilharEscalaBtn = document.getElementById('compartilharEscala');
+        const imprimirEscalaBtn = document.getElementById('imprimirEscala');
+        const printArea = document.getElementById('printArea');
+        
+        // Elementos do DOM para as regras
+        const regraLinhaCheckbox = document.getElementById('regraLinha');
+        const regraIntercalarCheckbox = document.getElementById('regraIntercalar');
+        const regraSequenciaCheckbox = document.getElementById('regraSequencia');
+        const regraPrioridadeCheckbox = document.getElementById('regraPrioridade');
+        
+        // Sistema de abas
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Função para alternar entre as abas
+        function switchTab(tabId) {
+            // Desativar todas as abas
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Ativar a aba selecionada
+            document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+        
+        // Adicionar eventos aos botões de abas
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+        
+        // Exibir mensagem temporária
+        function showMessage(text, type = 'success') {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${type === 'success' ? 'success-message' : 'error-message'}`;
+            messageEl.textContent = text;
+            
+            messageContainer.innerHTML = '';
+            messageContainer.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.remove();
+            }, 3000);
+        }
+        
+        // Renderizar tabela de profissionais
+        function renderProfissionaisTable() {
+            profissionaisTableBody.innerHTML = '';
+            
+            profissionais.forEach((profissional, index) => {
+                const row = document.createElement('tr');
+                
+                // Nome simples
+                const nameCell = document.createElement('td');
+                nameCell.textContent = profissional.nome;
+                row.appendChild(nameCell);
+                
+                // Gênero
+                const genderCell = document.createElement('td');
+                genderCell.textContent = profissional.genero === 'M' ? 'Masculino' : 'Feminino';
+                row.appendChild(genderCell);
+                
+                // Turmas
+                const turmasCell = document.createElement('td');
+                turmasCell.textContent = profissional.turmas ? profissional.turmas.join(', ') : '';
+                row.appendChild(turmasCell);
+                
+                // Nome completo com título
+                const fullNameCell = document.createElement('td');
+                const fullName = profissional.titulo ? `${profissional.titulo} ${profissional.nome}` : profissional.nome;
+                fullNameCell.textContent = fullName;
+                row.appendChild(fullNameCell);
+                
+                // Ações
+                const actionsCell = document.createElement('td');
+                actionsCell.className = 'actions';
+                
+                const editButton = document.createElement('button');
+                editButton.className = 'btn-small';
+                editButton.textContent = 'Editar';
+                editButton.addEventListener('click', () => editProfissional(index));
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'btn-small danger';
+                deleteButton.textContent = 'Excluir';
+                deleteButton.addEventListener('click', () => deleteProfissional(index));
+                
+                actionsCell.appendChild(editButton);
+                actionsCell.appendChild(deleteButton);
+                row.appendChild(actionsCell);
+                
+                profissionaisTableBody.appendChild(row);
+            });
+            
+            // Atualiza o JSON na textarea
+            updateJsonTextarea();
+        }
+        
+        // Atualizar a textarea com os dados em JSON
+        function updateJsonTextarea() {
+            const dadosCompletos = {
+                profissionais: profissionais,
+                datasSelecionadas: datasSelecionadas,
+                regras: regras
+            };
+            dataJsonTextarea.value = JSON.stringify(dadosCompletos, null, 2);
+        }
+        
+        // Limpar formulário
+        function clearForm() {
+            profissionalIdInput.value = '';
+            nomeInput.value = '';
+            generoSelect.value = '';
+            tituloSelect.value = '';
+            
+            // Limpar checkboxes de turmas
+            turmasCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            editingIndex = -1;
+            saveButton.textContent = 'Salvar Profissional';
+        }
+        
+        // Editar profissional
+        function editProfissional(index) {
+            const profissional = profissionais[index];
+            profissionalIdInput.value = index;
+            nomeInput.value = profissional.nome;
+            generoSelect.value = profissional.genero;
+            tituloSelect.value = profissional.titulo || '';
+            
+            // Marcar checkboxes de turmas
+            turmasCheckboxes.forEach(checkbox => {
+                checkbox.checked = profissional.turmas && profissional.turmas.includes(checkbox.value);
+            });
+            
+            editingIndex = index;
+            saveButton.textContent = 'Atualizar Profissional';
+            
+            // Mudar para a aba de profissionais
+            switchTab('profissionais');
+            
+            // Scroll para o formulário
+            document.querySelector('#profissionais form').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Excluir profissional
+        function deleteProfissional(index) {
+            if (confirm(`Tem certeza que deseja excluir ${profissionais[index].nome}?`)) {
+                profissionais.splice(index, 1);
+                renderProfissionaisTable();
+                showMessage('Profissional excluído com sucesso.', 'success');
+            }
+        }
+        
+        // Adicionar data à lista
+        function adicionarData() {
+            const data = dataSorteioInput.value;
+            
+            if (!data) {
+                showMessage('Por favor, selecione uma data para adicionar.', 'error');
+                return;
+            }
+            
+            // Verificar se a data já foi adicionada
+            if (datasSelecionadas.includes(data)) {
+                showMessage('Esta data já foi adicionada.', 'error');
+                return;
+            }
+            
+            // Adicionar a data à lista
+            datasSelecionadas.push(data);
+            
+            // Ordenar as datas
+            datasSelecionadas.sort();
+            
+            // Atualizar a exibição das datas
+            atualizarDatasExibidas();
+            
+            // Limpar o campo de data
+            dataSorteioInput.value = '';
+        }
+
+        // Remover data da lista
+        function removerData(data) {
+            datasSelecionadas = datasSelecionadas.filter(d => d !== data);
+            atualizarDatasExibidas();
+        }
+
+        // Atualizar a exibição das datas adicionadas
+        function atualizarDatasExibidas() {
+            datasAdicionadasDiv.innerHTML = '';
+            
+            datasSelecionadas.forEach(data => {
+                // Corrigir o problema de fuso horário adicionando 'T00:00:00' à data
+                const dataFormatada = new Date(data + 'T00:00:00').toLocaleDateString('pt-BR');
+                
+                const dataTag = document.createElement('div');
+                dataTag.className = 'data-tag';
+                dataTag.innerHTML = `
+                    ${dataFormatada}
+                    <span class="remover" data-data="${data}">&times;</span>
+                `;
+                
+                datasAdicionadasDiv.appendChild(dataTag);
+            });
+            
+            // Adicionar eventos aos botões de remover
+            document.querySelectorAll('.data-tag .remover').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const data = this.getAttribute('data-data');
+                    removerData(data);
+                });
+            });
+        }
+
+        // Realizar sorteio para todas as datas e turmas
+        function realizarSorteio() {
+            if (datasSelecionadas.length === 0) {
+                showMessage('Por favor, adicione pelo menos uma data para o sorteio.', 'error');
+                return;
+            }
+            
+            // Verificar se há profissionais cadastrados
+            if (profissionais.length === 0) {
+                showMessage('Não há profissionais cadastrados para realizar o sorteio.', 'error');
+                return;
+            }
+            
+            // Estrutura para armazenar os resultados do sorteio
+            const resultados = [];
+            
+            // Histórico de profissionais sorteados para cada turma
+            const historicoTurmas = {
+                Adultos: [],
+                Jovens: [],
+                Adolescentes: [],
+                Juniores: []
+            };
+            
+            // Realizar sorteio para cada data
+            datasSelecionadas.forEach((data, dataIndex) => {
+                // Profissionais já sorteados nesta data (para regra de não repetir na mesma linha)
+                const profissionaisSorteadosNaData = [];
+                
+                const resultado = {
+                    data: data,
+                    Adultos: '',
+                    Jovens: '',
+                    Adolescentes: '',
+                    Juniores: ''
+                };
+                
+                // Lista de turmas
+                const turmas = ['Adultos', 'Jovens', 'Adolescentes', 'Juniores'];
+                
+                // Sortear para cada turma
+                turmas.forEach(turma => {
+                    resultado[turma] = sortearProfissionalParaTurma(
+                        turma, 
+                        profissionaisSorteadosNaData, 
+                        historicoTurmas[turma],
+                        dataIndex
+                    );
+                    
+                    // Adicionar ao histórico se for um profissional válido
+                    if (resultado[turma] !== "Não há profissionais" && !resultado[turma].includes("Não há profissionais disponíveis")) {
+                        historicoTurmas[turma].push(resultado[turma]);
+                        
+                        // Adicionar à lista de profissionais sorteados nesta data
+                        if (regras.naoRepetirNaMesmaLinha) {
+                            // Extrair apenas o nome sem o título
+                            const nomeSemTitulo = resultado[turma].replace(/^(Pr|Pra|Pb|Dc|Ev)\s+/, '');
+                            profissionaisSorteadosNaData.push(nomeSemTitulo);
+                        }
+                    }
+                });
+                
+                resultados.push(resultado);
+            });
+            
+            // Ordenar resultados por data
+            resultados.sort((a, b) => new Date(a.data) - new Date(b.data));
+            
+            // Armazenar o resultado para compartilhamento e impressão
+            ultimoResultadoSorteio = resultados;
+            
+            // Exibir resultados
+            exibirResultadosSorteio(resultados);
+            
+            // Mostrar botões de ação
+            acoesSorteioDiv.classList.remove('hidden');
+        }
+
+        // Sortear um profissional para uma turma específica
+        function sortearProfissionalParaTurma(turma, profissionaisSorteadosNaData, historicoTurma, dataIndex) {
+            // Filtrar profissionais habilitados para a turma
+            let profissionaisHabilitados = profissionais.filter(p => 
+                p.turmas && p.turmas.includes(turma)
+            );
+            
+            if (profissionaisHabilitados.length === 0) {
+                return "Não há profissionais";
+            }
+            
+            // Aplicar regra: Não repetir nome na mesma linha
+            if (regras.naoRepetirNaMesmaLinha && profissionaisSorteadosNaData.length > 0) {
+                profissionaisHabilitados = profissionaisHabilitados.filter(p => 
+                    !profissionaisSorteadosNaData.includes(p.nome)
+                );
+                
+                if (profissionaisHabilitados.length === 0) {
+                    return "Não há profissionais disponíveis (regra: não repetir na linha)";
+                }
+            }
+            
+            // Aplicar regra: Intercalar homens e mulheres
+            if (regras.intercalarGeneros && dataIndex > 0 && historicoTurma.length > 0) {
+                // Determinar o último gênero usado
+                const ultimoProfissionalNome = historicoTurma[historicoTurma.length - 1].replace(/^(Pr|Pra|Pb|Dc|Ev)\s+/, '');
+                const ultimoProfissional = profissionais.find(p => p.nome === ultimoProfissionalNome);
+                
+                if (ultimoProfissional) {
+                    const ultimoGenero = ultimoProfissional.genero;
+                    const generoDesejado = ultimoGenero === 'M' ? 'F' : 'M';
+                    
+                    const profissionaisDoGeneroDesejado = profissionaisHabilitados.filter(p => p.genero === generoDesejado);
+                    
+                    if (profissionaisDoGeneroDesejado.length > 0) {
+                        profissionaisHabilitados = profissionaisDoGeneroDesejado;
+                    }
+                }
+            }
+            
+            // Aplicar regra: Não repetir nomes em sequência
+            if (regras.naoRepetirEmSequencia && historicoTurma.length > 0) {
+                const ultimoProfissionalNome = historicoTurma[historicoTurma.length - 1].replace(/^(Pr|Pra|Pb|Dc|Ev)\s+/, '');
+                
+                profissionaisHabilitados = profissionaisHabilitados.filter(p => p.nome !== ultimoProfissionalNome);
+                
+                if (profissionaisHabilitados.length === 0) {
+                    return "Não há profissionais disponíveis (regra: não repetir em sequência)";
+                }
+            }
+
+            // Aplicar regra: Prioridade para não selecionados
+            if (regras.prioridadeNaoSelecionados && historicoTurma.length > 0) {
+                // Obter nomes dos profissionais já sorteados (sem título)
+                const profissionaisJaSorteados = historicoTurma.map(nome => 
+                    nome.replace(/^(Pr|Pra|Pb|Dc|Ev)\s+/, '')
+                );
+                
+                // Filtrar profissionais que ainda não foram sorteados
+                const profissionaisNaoSorteados = profissionaisHabilitados.filter(p => 
+                    !profissionaisJaSorteados.includes(p.nome)
+                );
+                
+                // Se houver profissionais não sorteados, dar prioridade a eles
+                if (profissionaisNaoSorteados.length > 0) {
+                    profissionaisHabilitados = profissionaisNaoSorteados;
+                }
+            }
+            
+            // Realizar o sorteio
+            const indiceAleatorio = Math.floor(Math.random() * profissionaisHabilitados.length);
+            const profissionalSorteado = profissionaisHabilitados[indiceAleatorio];
+            
+            return profissionalSorteado.titulo 
+                ? `${profissionalSorteado.titulo} ${profissionalSorteado.nome}` 
+                : profissionalSorteado.nome;
+        }
+
+        // Exibir os resultados do sorteio em uma tabela
+        function exibirResultadosSorteio(resultados) {
+            // Criar a tabela
+            let html = `
+                <h3>Escala de Trabalho</h3>
+                <div class="print-section">
+                    <table class="sorteio-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Adultos</th>
+                                <th>Jovens</th>
+                                <th>Adolescentes</th>
+                                <th>Juniores</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Variável para controlar o mês atual
+            let mesAtual = null;
+            
+            // Adicionar linhas para cada resultado
+            resultados.forEach(resultado => {
+                // Corrigir o problema de fuso horário adicionando 'T00:00:00' à data
+                const data = new Date(resultado.data + 'T00:00:00');
+                const dataFormatada = data.toLocaleDateString('pt-BR');
+                const mes = data.getMonth();
+                
+                // Adicionar separador de mês se necessário
+                if (mes !== mesAtual) {
+                    const nomeMes = data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+                    html += `
+                        <tr class="mes-separador">
+                            <td colspan="5">${nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1)}</td>
+                        </tr>
+                    `;
+                    mesAtual = mes;
+                }
+                
+                // Adicionar linha com os resultados
+                html += `
+                    <tr>
+                        <td>${dataFormatada}</td>
+                        <td>${resultado.Adultos}</td>
+                        <td>${resultado.Jovens}</td>
+                        <td>${resultado.Adolescentes}</td>
+                        <td>${resultado.Juniores}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            // Exibir a tabela
+            resultadoSorteioDiv.innerHTML = html;
+            resultadoSorteioDiv.classList.remove('hidden');
+        }
+        
+        // Compartilhar a escala
+        function compartilharEscala() {
+            if (ultimoResultadoSorteio.length === 0) {
+                showMessage('Não há escala para compartilhar. Realize um sorteio primeiro.', 'error');
+                return;
+            }
+            
+            // Criar texto para compartilhamento
+            let textoCompartilhamento = "ESCALA DE TRABALHO\n\n";
+            
+            // Variável para controlar o mês atual
+            let mesAtual = null;
+            
+            // Adicionar linhas para cada resultado
+            ultimoResultadoSorteio.forEach(resultado => {
+                const data = new Date(resultado.data + 'T00:00:00');
+                const dataFormatada = data.toLocaleDateString('pt-BR');
+                const mes = data.getMonth();
+                
+                // Adicionar separador de mês se necessário
+                if (mes !== mesAtual) {
+                    const nomeMes = data.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+                    textoCompartilhamento += `\n${nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1)}\n`;
+                    textoCompartilhamento += "----------------------------------------\n";
+                    mesAtual = mes;
+                }
+                
+                // Adicionar linha com os resultados
+                textoCompartilhamento += `${dataFormatada}\n`;
+                textoCompartilhamento += `Adultos: ${resultado.Adultos}\n`;
+                textoCompartilhamento += `Jovens: ${resultado.Jovens}\n`;
+                textoCompartilhamento += `Adolescentes: ${resultado.Adolescentes}\n`;
+                textoCompartilhamento += `Juniores: ${resultado.Juniores}\n\n`;
+            });
+            
+            // Verificar se a Web Share API está disponível
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Escala de Trabalho',
+                    text: textoCompartilhamento
+                })
+                .then(() => showMessage('Escala compartilhada com sucesso!', 'success'))
+                .catch(error => {
+                    console.error('Erro ao compartilhar:', error);
+                    copiarParaAreaDeTransferencia(textoCompartilhamento);
+                });
+            } else {
+                // Fallback para navegadores que não suportam a Web Share API
+                copiarParaAreaDeTransferencia(textoCompartilhamento);
+            }
+        }
+        
+        // Copiar texto para a área de transferência
+        function copiarParaAreaDeTransferencia(texto) {
+            // Criar um elemento textarea temporário
+            const textarea = document.createElement('textarea');
+            textarea.value = texto;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'absolute';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            
+            // Selecionar e copiar o texto
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Remover o textarea
+            document.body.removeChild(textarea);
+            
+            showMessage('Escala copiada para a área de transferência!', 'success');
+        }
+        
+        // Imprimir a escala
+        function imprimirEscala() {
+            if (ultimoResultadoSorteio.length === 0) {
+                showMessage('Não há escala para imprimir. Realize um sorteio primeiro.', 'error');
+                return;
+            }
+            
+            // Preparar a área de impressão
+            printArea.innerHTML = '';
+            
+            // Criar o conteúdo para impressão
+            const printContent = document.createElement('div');
+            printContent.className = 'print-section';
+            
+            // Adicionar título
+            const titleContainer = document.createElement('div');
+            titleContainer.style.textAlign = 'center';
+            titleContainer.style.marginBottom = '30px';
+
+            const title = document.createElement('h1');
+            title.textContent = 'Escala de Trabalho';
+            title.style.fontSize = '24px';
+            title.style.marginBottom = '10px';
+
+            const subtitle = document.createElement('h2');
+            subtitle.textContent = document.querySelector('h1').textContent;
+            subtitle.style.fontSize = '18px';
+            subtitle.style.color = '#666';
+
+            titleContainer.appendChild(title);
+            titleContainer.appendChild(subtitle);
+            printContent.appendChild(titleContainer);
+            
+            // Clonar a tabela de resultados
+            const tabelaOriginal = document.querySelector('.sorteio-table');
+            const tabelaClone = tabelaOriginal.cloneNode(true);
+            
+            // Adicionar estilos inline para impressão
+            tabelaClone.style.width = '100%';
+            tabelaClone.style.borderCollapse = 'collapse';
+            tabelaClone.style.marginBottom = '20px';
+            
+            // Aplicar estilos às células
+            const celulas = tabelaClone.querySelectorAll('th, td');
+            celulas.forEach(celula => {
+                celula.style.border = '1px solid #000';
+                celula.style.padding = '8px';
+                celula.style.textAlign = 'left';
+            });
+            
+            // Aplicar estilos aos cabeçalhos
+            const cabecalhos = tabelaClone.querySelectorAll('th');
+            cabecalhos.forEach(cabecalho => {
+                cabecalho.style.backgroundColor = '#f2f2f2';
+                cabecalho.style.fontWeight = 'bold';
+            });
+            
+            // Adicionar a tabela ao conteúdo de impressão
+            printContent.appendChild(tabelaClone);
+            
+            // Adicionar rodapé
+            const footer = document.createElement('p');
+            footer.textContent = `Gerado em: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR')}`;
+            footer.style.textAlign = 'center';
+            footer.style.marginTop = '20px';
+            footer.style.fontSize = '12px';
+            footer.style.color = '#666';
+            printContent.appendChild(footer);
+            
+            // Adicionar o conteúdo à área de impressão
+            printArea.appendChild(printContent);
+            
+            // Abrir a caixa de diálogo de impressão
+            window.print();
+        }
+        
+        // Atualizar estado das regras
+        function atualizarRegras() {
+            regras.naoRepetirNaMesmaLinha = regraLinhaCheckbox.checked;
+            regras.intercalarGeneros = regraIntercalarCheckbox.checked;
+            regras.naoRepetirEmSequencia = regraSequenciaCheckbox.checked;
+            regras.prioridadeNaoSelecionados = regraPrioridadeCheckbox.checked;
+            
+            // Salvar regras no localStorage
+            salvarDadosLocalmente();
+        }
+        
+        // Salvar ou atualizar profissional
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const nome = nomeInput.value.trim();
+            const genero = generoSelect.value;
+            const titulo = tituloSelect.value;
+            
+            // Obter turmas selecionadas
+            const turmasSelecionadas = Array.from(turmasCheckboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+            
+            const profissional = {
+                nome,
+                genero,
+                titulo,
+                turmas: turmasSelecionadas
+            };
+            
+            if (editingIndex >= 0) {
+                // Atualizar profissional existente
+                profissionais[editingIndex] = profissional;
+                showMessage('Profissional atualizado com sucesso!', 'success');
+            } else {
+                // Adicionar novo profissional
+                profissionais.push(profissional);
+                showMessage('Profissional adicionado com sucesso!', 'success');
+            }
+            
+            renderProfissionaisTable();
+            clearForm();
+        });
+        
+        // Botão cancelar
+        cancelButton.addEventListener('click', clearForm);
+        
+        // Adicionar eventos
+        adicionarDataBtn.addEventListener('click', adicionarData);
+        realizarSorteioBtn.addEventListener('click', realizarSorteio);
+        compartilharEscalaBtn.addEventListener('click', compartilharEscala);
+        imprimirEscalaBtn.addEventListener('click', imprimirEscala);
+        
+        // Eventos para as regras
+        regraLinhaCheckbox.addEventListener('change', atualizarRegras);
+        regraIntercalarCheckbox.addEventListener('change', atualizarRegras);
+        regraSequenciaCheckbox.addEventListener('change', atualizarRegras);
+        regraPrioridadeCheckbox.addEventListener('change', atualizarRegras);
+        
+        // Copiar dados JSON para a área de transferência
+        copyJsonBtn.addEventListener('click', () => {
+            dataJsonTextarea.select();
+            document.execCommand('copy');
+            showMessage('Dados copiados para a área de transferência!', 'success');
+        });
+        
+        // Carregar dados do JSON na textarea
+        loadJsonBtn.addEventListener('click', () => {
+            try {
+                const jsonData = dataJsonTextarea.value.trim();
+                if (!jsonData) {
+                    showMessage('Nenhum dado para carregar.', 'error');
+                    return;
+                }
+                
+                const parsedData = JSON.parse(jsonData);
+                
+                // Verificar se é o formato antigo (apenas array de profissionais) ou novo (objeto com profissionais, datas e regras)
+                if (Array.isArray(parsedData)) {
+                    profissionais = parsedData;
+                } else {
+                    // Formato novo
+                    if (parsedData.profissionais) {
+                        profissionais = parsedData.profissionais;
+                    }
+                    
+                    if (parsedData.datasSelecionadas) {
+                        datasSelecionadas = parsedData.datasSelecionadas;
+                        atualizarDatasExibidas();
+                    }
+                    
+                    if (parsedData.regras) {
+                        regras = parsedData.regras;
+                        regraLinhaCheckbox.checked = regras.naoRepetirNaMesmaLinha;
+                        regraIntercalarCheckbox.checked = regras.intercalarGeneros;
+                        regraSequenciaCheckbox.checked = regras.naoRepetirEmSequencia;
+                        regraPrioridadeCheckbox.checked = regras.prioridadeNaoSelecionados || false;
+                    }
+                }
+                
+                renderProfissionaisTable();
+                showMessage('Dados carregados com sucesso!', 'success');
+            } catch (e) {
+                console.error('Erro ao processar JSON:', e);
+                showMessage('Erro ao processar os dados JSON. Verifique o formato.', 'error');
+            }
+        });
+        
+        // Carregar dados de exemplo
+        loadSampleDataBtn.addEventListener('click', () => {
+            if (profissionais.length > 0) {
+                if (!confirm('Isso substituirá os dados atuais. Deseja continuar?')) {
+                    return;
+                }
+            }
+            
+            profissionais = [...dadosExemplo];
+            renderProfissionaisTable();
+            showMessage('Dados de exemplo carregados!', 'success');
+        });
+        
+        // Limpar todos os dados
+        clearDataBtn.addEventListener('click', () => {
+            if (profissionais.length === 0 || confirm('Esta ação apagará TODOS os dados. Esta ação não pode ser desfeita. Deseja continuar?')) {
+                profissionais = [];
+                datasSelecionadas = [];
+                atualizarDatasExibidas();
+                renderProfissionaisTable();
+                clearForm();
+                showMessage('Todos os dados foram apagados.', 'success');
+            }
+        });
+        
+        // Salvar dados no localStorage
+        function salvarDadosLocalmente() {
+            localStorage.setItem('profissionaisData', JSON.stringify(profissionais));
+            localStorage.setItem('datasSelecionadas', JSON.stringify(datasSelecionadas));
+            localStorage.setItem('regras', JSON.stringify(regras));
+        }
+        
+        // Carregar dados do localStorage
+        function carregarDadosLocalmente() {
+            const dadosSalvos = localStorage.getItem('profissionaisData');
+            const datasSalvas = localStorage.getItem('datasSelecionadas');
+            const regrasSalvas = localStorage.getItem('regras');
+            
+            if (dadosSalvos) {
+                try {
+                    profissionais = JSON.parse(dadosSalvos);
+                    renderProfissionaisTable();
+                } catch (e) {
+                    console.error('Erro ao carregar dados locais:', e);
+                    // Carregar dados de exemplo como fallback
+                    profissionais = [...dadosExemplo];
+                    renderProfissionaisTable();
+                }
+            } else {
+                // Carregar dados de exemplo se não houver dados salvos
+                profissionais = [...dadosExemplo];
+                renderProfissionaisTable();
+            }
+            
+            if (datasSalvas) {
+                try {
+                    datasSelecionadas = JSON.parse(datasSalvas);
+                    atualizarDatasExibidas();
+                } catch (e) {
+                    console.error('Erro ao carregar datas salvas:', e);
+                    datasSelecionadas = [];
+                }
+            }
+            
+            if (regrasSalvas) {
+                try {
+                    regras = JSON.parse(regrasSalvas);
+                    regraLinhaCheckbox.checked = regras.naoRepetirNaMesmaLinha;
+                    regraIntercalarCheckbox.checked = regras.intercalarGeneros;
+                    regraSequenciaCheckbox.checked = regras.naoRepetirEmSequencia;
+                    regraPrioridadeCheckbox.checked = regras.prioridadeNaoSelecionados || false;
+                } catch (e) {
+                    console.error('Erro ao carregar regras salvas:', e);
+                }
+            }
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            // Carregar dados do localStorage ou usar dados de exemplo
+            carregarDadosLocalmente();
+            
+            // Adicionar evento para salvar dados quando houver mudanças
+            ['submit', 'click', 'change'].forEach(eventType => {
+                document.addEventListener(eventType, (e) => {
+                    if (
+                        e.target.id === 'saveButton' || 
+                        e.target.id === 'clearData' || 
+                        e.target.classList.contains('danger') ||
+                        e.target.id === 'loadJsonBtn' ||
+                        e.target.id === 'loadSampleData' ||
+                        e.target.id === 'adicionarData' ||
+                        e.target.classList.contains('remover') ||
+                        e.target.name === 'regras'
+                    ) {
+                        setTimeout(salvarDadosLocalmente, 100);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
