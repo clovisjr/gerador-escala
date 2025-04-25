@@ -1,0 +1,176 @@
+/* Estilos gerais para o sistema de escalas da igreja */
+
+body {
+  font-size: .875rem;
+  background-color: #f8f9fa;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  padding: 48px 0 0;
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    top: 5rem;
+  }
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+  padding: .75rem 1rem;
+  border-radius: 0.25rem;
+  margin: 0.2rem 0.5rem;
+}
+
+.sidebar .nav-link:hover {
+  background-color: rgba(0, 0, 0, .05);
+}
+
+.sidebar .nav-link.active {
+  color: #007bff;
+  background-color: rgba(0, 123, 255, .1);
+}
+
+.sidebar .nav-link .bi {
+  margin-right: 4px;
+  color: #727272;
+}
+
+.sidebar .nav-link.active .bi {
+  color: #007bff;
+}
+
+/* Conteúdo principal */
+main {
+  padding-top: 1.5rem;
+}
+
+/* Cards do dashboard */
+.card {
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: none;
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  font-weight: 500;
+}
+
+/* Tabelas */
+.table {
+  font-size: 0.875rem;
+}
+
+.table th {
+  font-weight: 600;
+  background-color: #f8f9fa;
+}
+
+/* Botões de ação nas tabelas */
+.btn-action {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  margin-right: 0.25rem;
+}
+
+/* Formulários */
+.form-label {
+  font-weight: 500;
+}
+
+/* Modais */
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+  font-weight: 600;
+}
+
+/* Cores personalizadas para status */
+.status-draft {
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+}
+
+.status-active {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.status-completed {
+  color: #1b1e21;
+  background-color: #d6d8d9;
+  border-color: #c6c8ca;
+}
+
+/* Estilos para login */
+#login-container {
+  margin-top: 5rem;
+}
+
+#login-container .card {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+#login-container .card-header {
+  background-color: #007bff;
+  color: white;
+  font-weight: 600;
+}
+
+/* Responsividade */
+@media (max-width: 767.98px) {
+  .table-responsive {
+    font-size: 0.75rem;
+  }
+  
+  .btn-action {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+  }
+}
+
+/* Animações */
+.fade-in {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Notificações */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1060;
+}
+
+.toast {
+  min-width: 250px;
+}

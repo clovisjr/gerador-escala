@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Escalas - Igreja</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+          <div class="text-center mb-4">
+            <h5>Sistema de Escalas</h5>
+            <p id="church-name">Igreja</p>
+          </div>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="#" id="nav-dashboard">
+                <i class="bi bi-house-door"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-schedules">
+                <i class="bi bi-calendar3"></i> Escalas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-members">
+                <i class="bi bi-people"></i> Membros
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nav-ministries">
+                <i class="bi bi-music-note-list"></i> Ministérios
+              </a>
+            </li>
+            <li class="nav-item admin-only" style="display: none;">
+              <a class="nav-link" href="#" id="nav-users">
+                <i class="bi bi-person-badge"></i> Usuários
+              </a>
+            </li>
+            <li class="nav-item admin-only" style="display: none;">
+              <a class="nav-link" href="#" id="nav-settings">
+                <i class="bi bi-gear"></i> Configurações
+              </a>
+            </li>
+            <li class="nav-item mt-5">
+              <a class="nav-link" href="#" id="nav-logout">
+                <i class="bi bi-box-arrow-right"></i> Sair
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- Main content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2" id="page-title">Dashboard</h1>
+          <div class="btn-toolbar mb-2 mb-md-0" id="page-actions">
+            <!-- Botões específicos de cada página serão adicionados aqui via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Área de conteúdo principal -->
+        <div id="main-content">
+          <!-- O conteúdo será carregado dinamicamente via JavaScript -->
+          <div id="login-container" style="display: none;">
+            <div class="row justify-content-center">
+              <div class="col-md-6 col-lg-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="text-center">Login</h4>
+                  </div>
+                  <div class="card-body">
+                    <form id="login-form">
+                      <div class="mb-3">
+                        <label for="username" class="form-label">Usuário</label>
+                        <input type="text" class="form-control" id="username" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="password" required>
+                      </div>
+                      <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Entrar</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="dashboard-container" style="display: none;">
+            <div class="row">
+              <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card bg-primary text-white">
+                  <div class="card-body">
+                    <h5 class="card-title">Total de Membros</h5>
+                    <h2 id="total-members">0</h2>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card bg-success text-white">
+                  <div class="card-body">
+                    <h5 class="card-title">Escalas Ativas</h5>
+                    <h2 id="active-schedules">0</h2>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card bg-info text-white">
+                  <div class="card-body">
+                    <h5 class="card-title">Próximos Eventos</h5>
+                    <h2 id="upcoming-events">0</h2>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-3 mb-4">
+                <div class="card bg-warning text-dark">
+                  <div class="card-body">
+                    <h5 class="card-title">Ministérios</h5>
+                    <h2 id="total-ministries">0</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-md-6 mb-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Próximos Eventos</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-striped table-sm">
+                        <thead>
+                          <tr>
+                            <th>Data</th>
+                            <th>Evento</th>
+                            <th>Tipo</th>
+                          </tr>
+                        </thead>
+                        <tbody id="upcoming-events-list">
+                          <!-- Eventos serão adicionados aqui via JavaScript -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h5>Minhas Atribuições</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-striped table-sm">
+                        <thead>
+                          <tr>
+                            <th>Data</th>
+                            <th>Evento</th>
+                            <th>Função</th>
+                          </tr>
+                        </thead>
+                        <tbody id="my-assignments-list">
+                          <!-- Atribuições serão adicionadas aqui via JavaScript -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="schedules-container" style="display: none;">
+            <div class="table-responsive">
+              <table class="table table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Período</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="schedules-list">
+                  <!-- Escalas serão adicionadas aqui via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="members-container" style="display: none;">
+            <div class="table-responsive">
+              <table class="table table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Ministério</th>
+                    <th>Função</th>
+                    <th>Contato</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="members-list">
+                  <!-- Membros serão adicionados aqui via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Outros containers para diferentes seções serão adicionados aqui -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modais -->
+  <!-- Modal de Membro -->
+  <div class="modal fade" id="memberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="memberModalTitle">Adicionar Membro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="member-form">
+            <input type="hidden" id="member-id">
+            <div class="mb-3">
+              <label for="member-name" class="form-label">Nome</label>
+              <input type="text" class="form-control" id="member-name" required>
+            </div>
+            <div class="mb-3">
+              <label for="member-email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="member-email">
+            </div>
+            <div class="mb-3">
+              <label for="member-phone" class="form-label">Telefone</label>
+              <input type="text" class="form-control" id="member-phone">
+            </div>
+            <div class="mb-3">
+              <label for="member-ministry" class="form-label">Ministério</label>
+              <select class="form-select" id="member-ministry">
+                <option value="">Selecione...</option>
+                <!-- Opções serão adicionadas via JavaScript -->
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="member-role" class="form-label">Função</label>
+              <select class="form-select" id="member-role">
+                <option value="">Selecione...</option>
+                <!-- Opções serão adicionadas via JavaScript -->
+              </select>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="member-active" checked>
+              <label class="form-check-label" for="member-active">Ativo</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="save-member">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Escala -->
+  <div class="modal fade" id="scheduleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="scheduleModalTitle">Adicionar Escala</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="schedule-form">
+            <input type="hidden" id="schedule-id">
+            <div class="mb-3">
+              <label for="schedule-type" class="form-label">Tipo</label>
+              <select class="form-select" id="schedule-type" required>
+                <option value="">Selecione...</option>
+                <!-- Opções serão adicionadas via JavaScript -->
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="schedule-title" class="form-label">Título</label>
+              <input type="text" class="form-control" id="schedule-title" required>
+            </div>
+            <div class="mb-3">
+              <label for="schedule-start-date" class="form-label">Data Inicial</label>
+              <input type="date" class="form-control" id="schedule-start-date" required>
+            </div>
+            <div class="mb-3">
+              <label for="schedule-end-date" class="form-label">Data Final</label>
+              <input type="date" class="form-control" id="schedule-end-date" required>
+            </div>
+            <div class="mb-3">
+              <label for="schedule-status" class="form-label">Status</label>
+              <select class="form-select" id="schedule-status">
+                <option value="draft">Rascunho</option>
+                <option value="active">Ativa</option>
+                <option value="completed">Concluída</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="save-schedule">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Evento -->
+  <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eventModalTitle">Adicionar Evento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="event-form">
+            <input type="hidden" id="event-id">
+            <input type="hidden" id="event-schedule-id">
+            <div class="mb-3">
+              <label for="event-title" class="form-label">Título</label>
+              <input type="text" class="form-control" id="event-title" required>
+            </div>
+            <div class="mb-3">
+              <label for="event-date" class="form-label">Data</label>
+              <input type="date" class="form-control" id="event-date" required>
+            </div>
+            <div class="mb-3">
+              <label for="event-type" class="form-label">Tipo</label>
+              <input type="text" class="form-control" id="event-type">
+            </div>
+            <div class="mb-3">
+              <label for="event-description" class="form-label">Descrição</label>
+              <textarea class="form-control" id="event-description" rows="3"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="save-event">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Atribuição -->
+  <div class="modal fade" id="assignmentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="assignmentModalTitle">Adicionar Atribuição</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="assignment-form">
+            <input type="hidden" id="assignment-id">
+            <input type="hidden" id="assignment-event-id">
+            <div class="mb-3">
+              <label for="assignment-member" class="form-label">Membro</label>
+              <select class="form-select" id="assignment-member" required>
+                <option value="">Selecione...</option>
+                <!-- Opções serão adicionadas via JavaScript -->
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="assignment-role" class="form-label">Função</label>
+              <select class="form-select" id="assignment-role" required>
+                <option value="">Selecione...</option>
+                <!-- Opções serão adicionadas via JavaScript -->
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="assignment-notes" class="form-label">Observações</label>
+              <textarea class="form-control" id="assignment-notes" rows="3"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="save-assignment">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
